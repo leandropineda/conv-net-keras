@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# handwriting dataset
+dataset/xml/
+dataset/forms/
+dataset/xml.tgz
+
+# pycharm
+*.swp
