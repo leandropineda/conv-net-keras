@@ -1,4 +1,4 @@
- 
+
 import os
 import os.path
 import argparse
@@ -21,13 +21,18 @@ font = ImageFont.truetype('corsiva.ttf')
 draw = Draw(Image.new("L",(100,100)))
 
 def create_folders(path):
-    path = os.path.join(path,'chars')
-    if not os.path.exists(path):
-        os.makedirs(path)
-    for i in range(32,123):
-        dir = os.path.join(path,str(i).zfill(3))
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+    sets = ['train','test','validation']
+    for s in sets:
+        temp_path = os.path.join(path, str(s))
+        if not os.path.exists(temp_path):
+            os.makedirs(temp_path)
+        temp_path = os.path.join(temp_path, 'chars')
+        if not os.path.exists(temp_path):
+            os.makedirs(temp_path)
+        for i in range(32,123):
+            dir = os.path.join(temp_path, str(i).zfill(3))
+            if not os.path.exists(dir):
+                os.makedirs(dir)
 
 def find_chars_centers(word):
 
@@ -114,46 +119,68 @@ def refine_line_bounds(form_image,xmin,ymin,xmax,ymax):
     #plt.show()
     return ymin, ymax
 
+# after splitting the last element of the list is an empty string
+train_set = open('fki_task/trainset.txt', 'r').read().split('\n')
+del train_set[-1]
+test_set = open('fki_task/testset.txt', 'r').read().split('\n')
+del test_set[-1]
+validation1_set = open('fki_task/validationset1.txt', 'r').read().split('\n')
+del validation1_set[-1]
+validation2_set = open('fki_task/validationset2.txt', 'r').read().split('\n')
+del validation2_set[-1]
+
+def get_dataset_directory(id):
+    if id in train_set:
+        return '/train'
+    elif id in test_set:
+        return '/test'
+    elif id in validation1_set or id in validation2_set:
+        return '/validation'
+    else:
+        raise Exception("Error")
+
 xmls = sorted(list_files(source_data_path+'xml','xml'))
 
 create_folders(dest_dir)
+
 it = 0
 for xml in xmls:
     try:
-      tree = ET.parse(xml)
-      root = tree.getroot()
-      form_id = root.attrib['id']
-      form_path = source_data_path+'forms/'+form_id+'.png'
-      form_image = Image.open(form_path)
-      for line in root.iter('line'):
-        line_text = line.attrib['text']
-        ymin=100000
-        ymax=0
-        xmin=100000
-        xmax=0
-        words = list()
-        for xword in line.iter('word'):
-            wxmax=0
-            wxmin=100000
-            for comp in xword.iter('cmp'):
-                y = int(comp.attrib['y'])
-                h = int(comp.attrib['height'])
-                x = int(comp.attrib['x'])
-                w = int(comp.attrib['width'])
-                ymin = min(ymin, y - 1)
-                ymax = max(ymax, y + h)
-                wxmin = min(wxmin,x)
-                wxmax = max(wxmax,x+w)
-            xmin = min(xmin, wxmin)
-            xmax = max(xmax, wxmax)
-            word = {'text': xword.attrib['text'],
-                    'xmin': wxmin-1,
-                    'xmax': wxmax,
-                    'id': xword.attrib['id']}
-            words.append(word)
-        chars = create_char_list(line,words)
-        ymin,ymax = refine_line_bounds(form_image,xmin,ymin,xmax,ymax)
-        crop_and_save_line_chars(form_image,chars,ymin,ymax,ymax-ymin,dest_dir)
+        tree = ET.parse(xml)
+        root = tree.getroot()
+        form_id = root.attrib['id']
+        form_path = source_data_path+'forms/'+form_id+'.png'
+        form_image = Image.open(form_path)
+        for line in root.iter('line'):
+            line_text = line.attrib['text']
+            ymin=100000
+            ymax=0
+            xmin=100000
+            xmax=0
+            words = list()
+            for xword in line.iter('word'):
+                wxmax=0
+                wxmin=100000
+                for comp in xword.iter('cmp'):
+                    y = int(comp.attrib['y'])
+                    h = int(comp.attrib['height'])
+                    x = int(comp.attrib['x'])
+                    w = int(comp.attrib['width'])
+                    ymin = min(ymin, y - 1)
+                    ymax = max(ymax, y + h)
+                    wxmin = min(wxmin,x)
+                    wxmax = max(wxmax,x+w)
+                xmin = min(xmin, wxmin)
+                xmax = max(xmax, wxmax)
+                word = {'text': xword.attrib['text'],
+                        'xmin': wxmin-1,
+                        'xmax': wxmax,
+                        'id': xword.attrib['id']}
+                words.append(word)
+            chars = create_char_list(line,words)
+            ymin,ymax = refine_line_bounds(form_image,xmin,ymin,xmax,ymax)
+            crop_and_save_line_chars(form_image,chars,ymin,ymax,ymax-ymin, dest_dir + get_dataset_directory(xword.attrib['id'][:-3]))
+            print "Writing " + str(dest_dir + get_dataset_directory(xword.attrib['id'][:-3]))
     except:
-      print "skip!"
+        print "skip!"
 

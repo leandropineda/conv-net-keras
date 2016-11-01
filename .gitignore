@@ -89,9 +89,10 @@ ENV/
 .ropeproject
 
 # handwriting dataset
-dataset/xml/
-dataset/forms/
-dataset/xml.tgz
+dataset/data/xml/
+dataset/data/forms/
+dataset/data/xml.tgz
+dataset/data_dest_dir/
 
 # pycharm
 *.swp
