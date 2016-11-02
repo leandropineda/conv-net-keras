@@ -11,6 +11,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
 from keras import backend as K
+from keras.preprocessing.image import ImageDataGenerator
 
 batch_size = 128
 nb_classes = 10
@@ -24,6 +25,30 @@ nb_filters = 32
 pool_size = (2, 2)
 # convolution kernel size
 kernel_size = (3, 3)
+
+# dataset path
+# It should contain one subdirectory per class, and 
+# the subdirectories should contain PNG or JPG images.
+trn_path = "../dataset/data_dest_dir/train/chars/"
+val_path = "../dataset/data_dest_dir/validation/chars/"
+tst_path = "../dataset/data_dest_dir/test/chars/"
+
+img_generator = ImageDataGenerator(
+                    rescale=1./255
+                    )
+
+trn_dataset = img_generator.flow_from_directory(
+    trn_path,
+    batch_size=128
+)
+val_dataset = img_generator.flow_from_directory(
+    val_path,
+    batch_size=128
+)
+tst_dataset = img_generator.flow_from_directory(
+    tst_path,
+    batch_size=128
+)
 
 # the data, shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
