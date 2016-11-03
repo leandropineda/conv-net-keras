@@ -13,7 +13,7 @@ from keras.utils import np_utils
 from keras import backend as K
 from keras.preprocessing.image import ImageDataGenerator
 
-batch_size = 128
+batch_size = 32
 nb_classes = 10
 nb_epoch = 12
 
@@ -43,15 +43,15 @@ img_generator = ImageDataGenerator(
 
 trn_dataset = img_generator.flow_from_directory(
     trn_path,
-    batch_size=128
+    batch_size=batch_size
 )
 val_dataset = img_generator.flow_from_directory(
     val_path,
-    batch_size=128
+    batch_size=batch_size
 )
 tst_dataset = img_generator.flow_from_directory(
     tst_path,
-    batch_size=128
+    batch_size=batch_size
 )
 
 trainSamples=trn_dataset.N
@@ -88,6 +88,8 @@ testSamples=tst_dataset.N
 
 # Hasta aca parece que es todo mnist
 
+input_shape = trn_dataset.image_shape
+
 model = Sequential()
 
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
@@ -103,15 +105,17 @@ model.add(Flatten())
 model.add(Dense(128))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(nb_classes))
+model.add(Dense(91))
 model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adadelta', # alternativa: rmsprop?
               metrics=['accuracy'])
 
-history=model.fit_generator(trn_dataset, batch_size=batch_size, nb_epoch=nb_epoch,
-          verbose=1) # nunca me termino de convencer esta implemntación...Entiendo que si no vamos a hacer algo como early stop, no necesitamos pasar validación acá. .
+history = model.fit_generator(trn_dataset, 
+                                nb_epoch=nb_epoch,
+                                samples_per_epoch=trainSamples,
+                                verbose=1) # nunca me termino de convencer esta implemntación...Entiendo que si no vamos a hacer algo como early stop, no necesitamos pasar validación acá. .
 trainAcc=history.history['acc'][-1]
                     
 
