@@ -45,19 +45,22 @@ img_generator = ImageDataGenerator(
 
 trn_dataset = img_generator.flow_from_directory(
     trn_path,
-    #color_mode='grayscale',
+    target_size=(img_rows,img_cols),
+    color_mode='grayscale',
     class_mode='categorical',
     batch_size=batch_size
 )
 val_dataset = img_generator.flow_from_directory(
     val_path,
-    #color_mode='grayscale',
+    taget_size=(img_rows,img_cols),
+    color_mode='grayscale',
     class_mode='categorical',
     batch_size=batch_size
 )
 tst_dataset = img_generator.flow_from_directory(
     tst_path,
-    #color_mode='grayscale',
+    target_size=(img_rows,img_cols),
+    color_mode='grayscale',
     class_mode='categorical',
     batch_size=batch_size
 )
