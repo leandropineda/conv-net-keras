@@ -14,7 +14,7 @@ from keras import backend as K
 from keras.preprocessing.image import ImageDataGenerator
 
 batch_size = 32
-nb_classes = 10
+nb_classes = 91
 nb_epoch = 12
 
 # input image dimensions
@@ -36,57 +36,35 @@ tst_path = "../dataset/data_dest_dir/test/chars/"
 # En este generador metemos el aumentado.
 # TODO: Ojo que el generador de Train solo tiene que tener aumentado (Hay que hacer un generator para train, y un generator pelado para valid/test)
 img_generator = ImageDataGenerator(
-                    rescale=1./255
+                    rescale=1./255,
+                    samplewise_center=True,
+                    samplewise_std_normalization=True
                     )
 
 # Viendo que hay dos formas que nadie se pone de acuerdo, tomo este orden que pusiste acá: validación para elegir hiperparámetros, test para el test final.
 
 trn_dataset = img_generator.flow_from_directory(
     trn_path,
+    #color_mode='grayscale',
+    class_mode='categorical',
     batch_size=batch_size
 )
 val_dataset = img_generator.flow_from_directory(
     val_path,
+    #color_mode='grayscale',
+    class_mode='categorical',
     batch_size=batch_size
 )
 tst_dataset = img_generator.flow_from_directory(
     tst_path,
+    #color_mode='grayscale',
+    class_mode='categorical',
     batch_size=batch_size
 )
 
-trainSamples=trn_dataset.N
-validationSamples=val_dataset.N
-testSamples=tst_dataset.N
-
-
-# TODO: hay que resolver el tema de las clases. Creo que por defecto estaría en clases categórcas.
-
-
-# Desde aca es mnist: the data, shuffled and split between train and test sets
-# (X_train, y_train), (X_test, y_test) = mnist.load_data() # TODO: esto es del mnist no? Yo digo que hagamos todo usando generators que despues vamos a neceistar... 
-
-# if K.image_dim_ordering() == 'th':
-#     X_train = X_train.reshape(X_train.shape[0], 1, img_rows, img_cols)
-#     X_test = X_test.reshape(X_test.shape[0], 1, img_rows, img_cols)
-#     input_shape = (1, img_rows, img_cols)
-# else:
-#     X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 1)
-#     X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 1)
-#     input_shape = (img_rows, img_cols, 1)
-
-# X_train = X_train.astype('float32')
-# X_test = X_test.astype('float32')
-# X_train /= 255
-# X_test /= 255
-# print('X_train shape:', X_train.shape)
-# print(X_train.shape[0], 'train samples')
-# print(X_test.shape[0], 'test samples')
-
-# # convert class vectors to binary class matrices
-# Y_train = np_utils.to_categorical(y_train, nb_classes)
-# Y_test = np_utils.to_categorical(y_test, nb_classes)
-
-# Hasta aca parece que es todo mnist
+trainSamples = trn_dataset.N
+validationSamples = val_dataset.N
+testSamples = tst_dataset.N
 
 input_shape = trn_dataset.image_shape
 
@@ -105,7 +83,7 @@ model.add(Flatten())
 model.add(Dense(128))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(91))
+model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
@@ -115,18 +93,16 @@ model.compile(loss='categorical_crossentropy',
 history = model.fit_generator(trn_dataset, 
                                 nb_epoch=nb_epoch,
                                 samples_per_epoch=trainSamples,
+                                validation_data=val_dataset,
+                                nb_val_samples=validationSamples,
                                 verbose=1) # nunca me termino de convencer esta implemntación...Entiendo que si no vamos a hacer algo como early stop, no necesitamos pasar validación acá. .
-trainAcc=history.history['acc'][-1]
-                    
-
-# Error de validación: para optimizar hiperparámetros
-scoreV = model.evaluate(val_dataset,validationSamples, verbose=0)
-print('Valid score:', scoreV[0])
-print('Valid accuracy:', scoreV[1])
+trainAcc = history.history['acc'][-1]
 
 
 # Aca hay que elegir los mejores hiperparametros, reentrenar con train+validación (hay que hacer otro generador...no se si hace falta dado que son muchos datos), y despues se evalua en test
 
-scoreV = model.evaluate_generator(tst_dataset,testSamples, verbose=0)
+scoreT = model.evaluate_generator(tst_dataset, testSamples, verbose=0)
 print('Test score:', scoreT[0])
 print('Test accuracy:', scoreT[1])
+
+print(history.history)
