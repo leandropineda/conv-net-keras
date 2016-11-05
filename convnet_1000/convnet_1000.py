@@ -17,7 +17,7 @@ import pprint
 
 batch_size = 32
 nb_classes = 91
-nb_epoch = 25
+nb_epoch = 40
 
 # input image dimensions
 img_rows, img_cols = 28, 28
