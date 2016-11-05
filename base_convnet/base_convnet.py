@@ -127,6 +127,7 @@ history = model.fit_generator(trn_dataset,
 # Aca hay que elegir los mejores hiperparametros, reentrenar con train+validación (hay que hacer otro generador...no se si hace falta dado que son muchos datos), y despues se evalua en test
 
 scoreT = model.evaluate_generator(tst_dataset, testSamples)
+print("Test score: " + str(scoreT[0]) + "\nTest accuracy: " + str(scoreT[1]))
 
 ####################################################################################################################
 # Save some results to a text file
