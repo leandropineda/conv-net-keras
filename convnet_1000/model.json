@@ -14,7 +14,7 @@
                     null,
                     28,
                     28,
-                    3
+                    1
                 ],
                 "bias": true,
                 "border_mode": "valid",
