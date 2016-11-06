@@ -68,7 +68,7 @@ tst_dataset = img_generator.flow_from_directory(
     batch_size=batch_size
 )
 
-trainSamples = trn_dataset.N
+trainSamples = int(trn_dataset.N * 0.25)
 validationSamples = val_dataset.N
 testSamples = tst_dataset.N
 
