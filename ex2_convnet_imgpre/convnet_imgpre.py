@@ -17,7 +17,7 @@ import pprint
 
 batch_size = 32
 nb_classes = 91
-nb_epoch = 15
+nb_epoch = 20
 
 # input image dimensions
 img_rows, img_cols = 28, 28
@@ -41,9 +41,9 @@ tst_path = "../dataset/data_dest_dir/test/chars/"
 # En este generador metemos el aumentado.
 # TODO: Ojo que el generador de Train solo tiene que tener aumentado (Hay que hacer un generator para train, y un generator pelado para valid/test)
 img_generator = ImageDataGenerator(
-                    #rescale=1./255,
-                    #samplewise_center=True,
-                    #samplewise_std_normalization=True
+                    rescale=1./255,
+                    samplewise_center=True,
+                    samplewise_std_normalization=True
                     )
 
 # Viendo que hay dos formas que nadie se pone de acuerdo, tomo este orden que pusiste acá: validación para elegir hiperparámetros, test para el test final.
