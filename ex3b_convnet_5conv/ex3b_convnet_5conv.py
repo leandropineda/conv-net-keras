@@ -68,9 +68,14 @@ tst_dataset = img_generator.flow_from_directory(
     batch_size=batch_size
 )
 
-trainSamples = int(trn_dataset.N * 0.25)
-validationSamples = val_dataset.N
-testSamples = tst_dataset.N
+trainSamples = int(trn_dataset.N)
+trainSamples -= trainSamples % batch_size  # tiene que se multiplo de batch_size
+                                           # https://github.com/fchollet/keras/issues/3256
+validationSamples = int(val_dataset.N)
+validationSamples -= validationSamples % batch_size
+
+testSamples = int(tst_dataset.N)
+testSamples -= testSamples % batch_size
 
 input_shape = trn_dataset.image_shape
 print("Image shape: " + str(input_shape))
@@ -86,7 +91,13 @@ model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
 model.add(Activation('relu'))
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
+model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=pool_size))
+model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+model.add(Activation('relu'))
+model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+model.add(Activation('relu'))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
