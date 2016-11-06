@@ -17,7 +17,7 @@ import pprint
 
 batch_size = 32
 nb_classes = 91
-nb_epoch = 20
+nb_epoch = 40
 
 # input image dimensions
 img_rows, img_cols = 28, 28
@@ -41,9 +41,7 @@ tst_path = "../dataset/data_dest_dir/test/chars/"
 # En este generador metemos el aumentado.
 # TODO: Ojo que el generador de Train solo tiene que tener aumentado (Hay que hacer un generator para train, y un generator pelado para valid/test)
 img_generator = ImageDataGenerator(
-                    rescale=1./255,
-                    samplewise_center=True,
-                    samplewise_std_normalization=True
+                    rescale=1./255
                     )
 
 # Viendo que hay dos formas que nadie se pone de acuerdo, tomo este orden que pusiste acá: validación para elegir hiperparámetros, test para el test final.
@@ -51,21 +49,21 @@ img_generator = ImageDataGenerator(
 trn_dataset = img_generator.flow_from_directory(
     trn_path,
     target_size=(img_rows, img_cols),
-    #color_mode='grayscale',
+    color_mode='grayscale',
     class_mode='categorical',
     batch_size=batch_size
 )
 val_dataset = img_generator.flow_from_directory(
     val_path,
     target_size=(img_rows, img_cols),
-    #color_mode='grayscale',
+    color_mode='grayscale',
     class_mode='categorical',
     batch_size=batch_size
 )
 tst_dataset = img_generator.flow_from_directory(
     tst_path,
     target_size=(img_rows, img_cols),
-    #color_mode='grayscale',
+    color_mode='grayscale',
     class_mode='categorical',
     batch_size=batch_size
 )
@@ -105,17 +103,6 @@ model.compile(loss='categorical_crossentropy',
 model.summary()
 
 ####################################################################################################################
-# Save the model to a json file
-####################################################################################################################
-text_file = open('model.json', 'w')
-model_json = str(model.to_json())
-parsed_model_json = json.loads(model_json)
-text_file.write(json.dumps(parsed_model_json,  # JSON pretty print
-                           sort_keys=True,
-                           indent=4))
-text_file.close()
-
-####################################################################################################################
 # Start training
 ####################################################################################################################
 history = model.fit_generator(trn_dataset,
@@ -128,6 +115,17 @@ history = model.fit_generator(trn_dataset,
 
 scoreT = model.evaluate_generator(tst_dataset, testSamples)
 print("Test score: " + str(scoreT[0]) + "\nTest accuracy: " + str(scoreT[1]))
+
+####################################################################################################################
+# Save the model to a json file
+####################################################################################################################
+text_file = open('model.json', 'w')
+model_json = str(model.to_json())
+parsed_model_json = json.loads(model_json)
+text_file.write(json.dumps(parsed_model_json,  # JSON pretty print
+                           sort_keys=True,
+                           indent=4))
+text_file.close()
 
 ####################################################################################################################
 # Save some results to a text file
