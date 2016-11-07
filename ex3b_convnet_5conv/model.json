@@ -105,23 +105,6 @@
             }
         },
         {
-            "class_name": "MaxPooling2D",
-            "config": {
-                "border_mode": "valid",
-                "dim_ordering": "tf",
-                "name": "maxpooling2d_1",
-                "pool_size": [
-                    2,
-                    2
-                ],
-                "strides": [
-                    2,
-                    2
-                ],
-                "trainable": true
-            }
-        },
-        {
             "class_name": "Convolution2D",
             "config": {
                 "W_constraint": null,
@@ -182,6 +165,23 @@
             "config": {
                 "activation": "relu",
                 "name": "activation_5",
+                "trainable": true
+            }
+        },
+        {
+            "class_name": "MaxPooling2D",
+            "config": {
+                "border_mode": "valid",
+                "dim_ordering": "tf",
+                "name": "maxpooling2d_1",
+                "pool_size": [
+                    2,
+                    2
+                ],
+                "strides": [
+                    2,
+                    2
+                ],
                 "trainable": true
             }
         },
