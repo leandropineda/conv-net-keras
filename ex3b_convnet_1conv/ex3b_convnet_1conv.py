@@ -89,6 +89,7 @@ model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
                         border_mode='valid',
                         input_shape=input_shape))
 model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=pool_size))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
