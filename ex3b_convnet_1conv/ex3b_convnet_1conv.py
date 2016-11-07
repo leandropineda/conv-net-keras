@@ -68,7 +68,7 @@ tst_dataset = img_generator.flow_from_directory(
     batch_size=batch_size
 )
 
-trainSamples = int(trn_dataset.N)
+trainSamples = int(trn_dataset.N * .25)
 trainSamples -= trainSamples % batch_size  # tiene que se multiplo de batch_size
                                            # https://github.com/fchollet/keras/issues/3256
 validationSamples = int(val_dataset.N)
