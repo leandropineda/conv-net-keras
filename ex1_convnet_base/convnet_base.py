@@ -70,9 +70,14 @@ tst_dataset = img_generator.flow_from_directory(
     batch_size=batch_size
 )
 
-trainSamples = trn_dataset.N
-validationSamples = val_dataset.N
-testSamples = tst_dataset.N
+trainSamples = int(trn_dataset.N)
+trainSamples -= trainSamples % batch_size  # tiene que se multiplo de batch_size
+                                           # https://github.com/fchollet/keras/issues/3256
+validationSamples = int(val_dataset.N)
+validationSamples -= validationSamples % batch_size
+
+testSamples = int(tst_dataset.N)
+testSamples -= testSamples % batch_size
 
 input_shape = trn_dataset.image_shape
 print("Image shape: " + str(input_shape))
