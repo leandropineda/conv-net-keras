@@ -135,6 +135,14 @@
             }
         },
         {
+            "class_name": "Dropout",
+            "config": {
+                "name": "dropout_1",
+                "p": 0.5,
+                "trainable": true
+            }
+        },
+        {
             "class_name": "Convolution2D",
             "config": {
                 "W_constraint": null,
@@ -218,7 +226,7 @@
         {
             "class_name": "Dropout",
             "config": {
-                "name": "dropout_1",
+                "name": "dropout_2",
                 "p": 0.25,
                 "trainable": true
             }
@@ -258,7 +266,7 @@
         {
             "class_name": "Dropout",
             "config": {
-                "name": "dropout_2",
+                "name": "dropout_3",
                 "p": 0.5,
                 "trainable": true
             }
