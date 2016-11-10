@@ -116,7 +116,7 @@ model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
-              optimizer='nadam',  # alternativa: rmsprop?
+              optimizer='adamax',  # alternativa: rmsprop?
               metrics=['accuracy'])
 
 model.summary()
