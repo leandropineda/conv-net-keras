@@ -207,19 +207,34 @@
             }
         },
         {
-            "class_name": "MaxPooling2D",
+            "class_name": "Convolution2D",
             "config": {
+                "W_constraint": null,
+                "W_regularizer": null,
+                "activation": "linear",
+                "activity_regularizer": null,
+                "b_constraint": null,
+                "b_regularizer": null,
+                "bias": true,
                 "border_mode": "valid",
                 "dim_ordering": "tf",
-                "name": "maxpooling2d_2",
-                "pool_size": [
-                    2,
-                    2
+                "init": "glorot_uniform",
+                "name": "convolution2d_6",
+                "nb_col": 3,
+                "nb_filter": 32,
+                "nb_row": 3,
+                "subsample": [
+                    1,
+                    1
                 ],
-                "strides": [
-                    2,
-                    2
-                ],
+                "trainable": true
+            }
+        },
+        {
+            "class_name": "Activation",
+            "config": {
+                "activation": "relu",
+                "name": "activation_6",
                 "trainable": true
             }
         },
@@ -251,7 +266,7 @@
                 "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_1",
-                "output_dim": 300,
+                "output_dim": 500,
                 "trainable": true
             }
         },
@@ -259,7 +274,7 @@
             "class_name": "Activation",
             "config": {
                 "activation": "relu",
-                "name": "activation_6",
+                "name": "activation_7",
                 "trainable": true
             }
         },
@@ -292,7 +307,7 @@
             "class_name": "Activation",
             "config": {
                 "activation": "softmax",
-                "name": "activation_7",
+                "name": "activation_8",
                 "trainable": true
             }
         }

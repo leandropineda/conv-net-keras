@@ -102,11 +102,14 @@ model.add(Activation('relu'))
 
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=pool_size))
+
+model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+model.add(Activation('relu'))
+
 
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(300))
+model.add(Dense(500))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
 model.add(Dense(nb_classes))
