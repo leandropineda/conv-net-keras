@@ -3,6 +3,7 @@ import os.path
 import random
 from shutil import copy2
 from binarizeImage import binarizeImage
+
 def create_folders(path):
     sets = ['train', 'validation', 'test']
     for s in sets:
