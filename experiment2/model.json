@@ -63,7 +63,7 @@
                 "b_constraint": null,
                 "b_regularizer": null,
                 "bias": true,
-                "border_mode": "valid",
+                "border_mode": "same",
                 "dim_ordering": "tf",
                 "init": "glorot_uniform",
                 "name": "convolution2d_2",
@@ -135,9 +135,9 @@
             }
         },
         {
-            "class_name": "Dropout",
+            "class_name": "SpatialDropout2D",
             "config": {
-                "name": "dropout_1",
+                "name": "spatialdropout2d_1",
                 "p": 0.5,
                 "trainable": true
             }
@@ -241,7 +241,7 @@
         {
             "class_name": "Dropout",
             "config": {
-                "name": "dropout_2",
+                "name": "dropout_1",
                 "p": 0.25,
                 "trainable": true
             }
@@ -266,7 +266,7 @@
                 "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_1",
-                "output_dim": 500,
+                "output_dim": 400,
                 "trainable": true
             }
         },
@@ -281,7 +281,7 @@
         {
             "class_name": "Dropout",
             "config": {
-                "name": "dropout_3",
+                "name": "dropout_2",
                 "p": 0.5,
                 "trainable": true
             }
@@ -299,6 +299,31 @@
                 "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_2",
+                "output_dim": 1000,
+                "trainable": true
+            }
+        },
+        {
+            "class_name": "Activation",
+            "config": {
+                "activation": "relu",
+                "name": "activation_8",
+                "trainable": true
+            }
+        },
+        {
+            "class_name": "Dense",
+            "config": {
+                "W_constraint": null,
+                "W_regularizer": null,
+                "activation": "linear",
+                "activity_regularizer": null,
+                "b_constraint": null,
+                "b_regularizer": null,
+                "bias": true,
+                "init": "glorot_uniform",
+                "input_dim": null,
+                "name": "dense_3",
                 "output_dim": 91,
                 "trainable": true
             }
@@ -307,7 +332,7 @@
             "class_name": "Activation",
             "config": {
                 "activation": "softmax",
-                "name": "activation_8",
+                "name": "activation_9",
                 "trainable": true
             }
         }

@@ -6,9 +6,8 @@ import numpy as np
 #np.random.seed(1337)  # for reproducibility
 
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Dense, Dropout, Activation, Flatten, SpatialDropout2D
 from keras.layers import Convolution2D, MaxPooling2D
-from keras import metrics
 from keras.layers.normalization import BatchNormalization
 from keras.utils import np_utils
 from keras import backend as K
@@ -90,13 +89,14 @@ model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
 model.add(Activation('relu'))
 
 model.add(BatchNormalization())
-model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
+                        border_mode='same'))
 model.add(Activation('relu'))
 
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=pool_size))
-model.add(Dropout(0.5))
+model.add(SpatialDropout2D(0.5))
 
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
@@ -110,9 +110,11 @@ model.add(Activation('relu'))
 
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(500))
+model.add(Dense(400))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
+model.add(Dense(1000))
+model.add(Activation('relu'))
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
