@@ -1,0 +1,4 @@
+def binarizeImage(imfile,dest_path):
+    print imfile
+    print dest_path
+    error(0)
