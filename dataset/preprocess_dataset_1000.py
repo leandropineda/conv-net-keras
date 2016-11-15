@@ -29,9 +29,10 @@ def create_dataset(source_path, dest_path):
                 if os.listdir(directory):  # check if directory is not empty
                     class_files = []
                     for f in os.listdir(directory):
-                        imfile=os.path.join(directory, f)
-                        binarizeImage(imfile,dest_path)
+                        if '.directory' not in f:
+                            imfile=os.path.join(directory, f)
+                            binarizeImage(imfile,dest_path)
                         
         
-homedir='/home/tc9/Escritorio/Untitled Folder/'
+homedir='/home/leandro/workspace/'
 create_dataset(homedir+'conv-net-keras/dataset/dataset_1000/', homedir+'conv-net-keras/dataset/dataset_1000_preproc/')
