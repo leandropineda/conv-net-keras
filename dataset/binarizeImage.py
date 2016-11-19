@@ -2,8 +2,8 @@ from scipy import misc
 from skimage import filters
 import matplotlib.pyplot as plt
 
-def binarizeImage(imfile,dest_path):
-    destfile=dest_path+imfile[imfile.find("1000")+5:]
+def binarizeImage(imfile, dest_path):
+    destfile = imfile.replace('data_dest_dir', 'dataset_preproc')
     im=misc.imread(imfile,flatten=True)
     #plt.show()
     try:
@@ -17,4 +17,4 @@ def binarizeImage(imfile,dest_path):
             else:
                 im[x][y]=255
     misc.imsave(destfile,im)
-    
+

@@ -345,7 +345,7 @@
                 "b_constraint": null,
                 "b_regularizer": null,
                 "bias": true,
-                "init": "he_normal",
+                "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_1",
                 "output_dim": 2048,
@@ -364,7 +364,7 @@
             "class_name": "Dropout",
             "config": {
                 "name": "dropout_1",
-                "p": 0.5,
+                "p": 0.3,
                 "trainable": true
             }
         },
@@ -378,7 +378,7 @@
                 "b_constraint": null,
                 "b_regularizer": null,
                 "bias": true,
-                "init": "he_normal",
+                "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_2",
                 "output_dim": 1024,
@@ -397,7 +397,7 @@
             "class_name": "Dropout",
             "config": {
                 "name": "dropout_2",
-                "p": 0.5,
+                "p": 0.3,
                 "trainable": true
             }
         },
@@ -411,7 +411,7 @@
                 "b_constraint": null,
                 "b_regularizer": null,
                 "bias": true,
-                "init": "he_normal",
+                "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_3",
                 "output_dim": 512,
@@ -430,7 +430,7 @@
             "class_name": "Dropout",
             "config": {
                 "name": "dropout_3",
-                "p": 0.5,
+                "p": 0.3,
                 "trainable": true
             }
         },
@@ -444,7 +444,7 @@
                 "b_constraint": null,
                 "b_regularizer": null,
                 "bias": true,
-                "init": "he_normal",
+                "init": "glorot_uniform",
                 "input_dim": null,
                 "name": "dense_4",
                 "output_dim": 91,

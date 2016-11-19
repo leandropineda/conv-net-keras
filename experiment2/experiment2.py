@@ -72,9 +72,9 @@ kernel_size = (3, 3)
 # It should contain one subdirectory per class, and
 # the subdirectories should contain PNG or JPG images.
 ####################################################################################################################
-trn_path = "../dataset/data_dest_dir/train/chars/"
-val_path = "../dataset/data_dest_dir/validation/chars/"
-tst_path = "../dataset/data_dest_dir/test/chars/"
+trn_path = "../dataset/dataset_preproc/train/chars/"
+val_path = "../dataset/dataset_preproc/validation/chars/"
+tst_path = "../dataset/dataset_preproc/test/chars/"
 
 
 # En este generador metemos el aumentado.
@@ -153,17 +153,17 @@ model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=pool_size))
 
 model.add(Flatten())
-model.add(Dense(2048, init='he_normal'))
+model.add(Dense(2048))
 model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(1024, init='he_normal'))
+model.add(Dropout(0.3))
+model.add(Dense(1024))
 model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(512, init='he_normal'))
+model.add(Dropout(0.3))
+model.add(Dense(512))
 model.add(Activation('relu'))
-model.add(Dropout(0.5))
+model.add(Dropout(0.3))
 
-model.add(Dense(nb_classes, init='he_normal'))
+model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
@@ -190,29 +190,6 @@ print("Evaluating Model...")
 scoreT = model.evaluate_generator(tst_dataset, tst_samples)
 print("Test score: " + str(scoreT[0]) + "\nTest accuracy: " + str(scoreT[1]))
 
-####################################################################################################################
-# Confusion matrix
-####################################################################################################################
-print("Building Confusion Matrix...")
-y_true = []
-y_pred = []
-i = 0
-while i < (int(tst_samples/batch_size) + 1):
-    batch = tst_dataset.next()
-    y_true.append(np.apply_along_axis(np.argmax, 1, batch[1]))
-    y_pred.append(np.apply_along_axis(np.argmax, 1, model.predict(batch[0], batch_size=batch_size)))
-    i += 1
-
-y_true = [i for subl in y_true for i in subl]
-y_pred = [i for subl in y_pred for i in subl]
-
-classes = np.unique(np.concatenate((y_true, y_pred))) + 32
-
-cnf_matrix = confusion_matrix(y_true, y_pred)
-plt.figure(figsize=(80, 80))
-plot_confusion_matrix(cnf_matrix, classes=classes,
-                      title='Confusion matrix')
-plt.savefig('cnf_matrix.pdf', format='pdf')
 
 ####################################################################################################################
 # Save the model to a json file
@@ -242,7 +219,6 @@ text_file.close()
 # Plot some results and save to file
 ####################################################################################################################
 # summarize history for accuracy
-plt.clf()
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])
 plt.title('model accuracy')
@@ -259,3 +235,28 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper left')
 plt.savefig("results_loss.png")
+
+####################################################################################################################
+# Confusion matrix
+####################################################################################################################
+plt.clf()
+print("Building Confusion Matrix...")
+y_true = []
+y_pred = []
+i = 0
+while i < (int(tst_samples/batch_size) + 1):
+    batch = tst_dataset.next()
+    y_true.append(np.apply_along_axis(np.argmax, 1, batch[1]))
+    y_pred.append(np.apply_along_axis(np.argmax, 1, model.predict(batch[0], batch_size=batch_size)))
+    i += 1
+
+y_true = [i for subl in y_true for i in subl]
+y_pred = [i for subl in y_pred for i in subl]
+
+classes = np.unique(np.concatenate((y_true, y_pred))) + 32
+
+cnf_matrix = confusion_matrix(y_true, y_pred)
+plt.figure(figsize=(80, 80))
+plot_confusion_matrix(cnf_matrix, classes=classes,
+                      title='Confusion matrix')
+plt.savefig('cnf_matrix.png', format='png')
